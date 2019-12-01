@@ -15,13 +15,70 @@ const server = http.createServer((req,res) => {
 	console.log(`Incoming request ${req.method}, ${req.url} received at ${timestamp}`);
 
 	let parsedURL = url.parse(req.url,true); // true to get query as object 
-	let max = (parsedURL.query.max) ? parsedURL.query.max : 20;   		 
+	 		 
 
 	switch(parsedURL.pathname) {
 		case '/register':
-			register(req,res);
+				const form = new formidable.IncomingForm();
+				form.parse(req, (err, fields, files) => {
+				  // console.log(JSON.stringify(files));
+					   
+				  if ( (fields.regpassword == fields.confirmpassword) ){
+						regid = fields.regid;
+						regpassword= fields.regpassword;
+					  }
+				  else {
+						res.writeHead(200, {"Content-Type": "text/html"});
+						res.write('<html><body>Confirm password does not match!<br>');
+						res.end('<a href="/">Back</a></body></html>')}
+				  
+				  let client = new MongoClient(mongourl);
+					client.connect((err) => {
+					  try {
+						  assert.equal(err,null);
+						} catch (err) {
+						  res.writeHead(500,{"Content-Type":"text/plain"});
+						  res.end("MongoClient connect() failed!");
+						  return(-1);
+					  }
+					  const db = client.db(dbName);
+					  let r = {};
+					  r['regid'] = regid;
+					  r['password'] = regpassword;
+					  insertUser(db,r,(result) => {
+						client.close();
+						res.writeHead(200, {"Content-Type": "text/html"});
+						res.write('<html><body>New account registered!<br>');
+						res.end('<a href="/">Back</a></body></html>')
+					  })
+					});
+				  
+				});
 			break;
-
+		case '/login':
+				if (req.method == 'POST') {
+					let data = '';  // message body data
+			  
+					// process data in message body
+					req.on('data', (payload) => {
+					   data += payload;
+					});
+			
+					req.on('end', () => {  
+						let postdata = qs.parse(data);
+						res.writeHead(200, {'Content-Type': 'text/html'}); 
+						res.write('<html>')        
+						res.write(`User Name = ${postdata.name}`);
+						res.write('<br>')
+						res.write(`Password = ${postdata.password}`);
+						res.end('</html>')                 
+					 })	
+				} else {
+					res.writeHead(404, {'Content-Type': 'text/plain'}); 
+					res.end('I can only handle POST request!!! Sorry.')
+				}
+			
+			break;
 		
 		case '/read':
 			read_n_print(res,parseInt(max));
@@ -95,45 +152,8 @@ const server = http.createServer((req,res) => {
 
 
 
-const register = (req,res) => { 
-	
-	
-	const form = new formidable.IncomingForm();
-    form.parse(req, (err, fields, files) => {
-      // console.log(JSON.stringify(files));
-           
-      if ( (fields.regpassword == fields.confirmpassword) ){
-			regid = fields.regid;
-			regpassword= fields.regpassword;
-		  }
-	  else {
-			res.writeHead(200, {"Content-Type": "text/html"});
-			res.write('<html><body>Confirm password does not match!<br>');
-			res.end('<a href="/">Back</a></body></html>')}
-	  
-      let client = new MongoClient(mongourl);
-        client.connect((err) => {
-          try {
-              assert.equal(err,null);
-            } catch (err) {
-              res.writeHead(500,{"Content-Type":"text/plain"});
-              res.end("MongoClient connect() failed!");
-              return(-1);
-          }
-          const db = client.db(dbName);
-          let r = {};
-          r['regid'] = regid;
-          r['password'] = regpassword;
-          insertUser(db,r,(result) => {
-            client.close();
-            res.writeHead(200, {"Content-Type": "text/html"});
-            res.write('<html><body>New account registered!<br>');
-            res.end('<a href="/">Back</a></body></html>')
-          })
-        });
-      
-    });
-}
+
+
 
 const insertUser = (db,r,callback) => {
 	db.collection('user').insertOne(r,(err,result) => {
