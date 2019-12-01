@@ -33,7 +33,7 @@ const server = http.createServer((req,res) => {
 						res.write('<html><body>Confirm password does not match!<br>');
 						res.end('<a href="/">Back</a></body></html>')}
 				  
-				  let client = new MongoClient(mongourl);
+				  let client = new MongoClient(mongoDBurl);
 					client.connect((err) => {
 					  try {
 						  assert.equal(err,null);
@@ -74,7 +74,7 @@ const server = http.createServer((req,res) => {
 							const db = client.db(dbName);
 							try {
 							obj ={};
-							obj = JSON.parse(postdata.logid+postdata.password);
+							obj = JSON.parse(postdata);
 							} catch (err) {
 							console.log('Invalid criteria!');
 							}
