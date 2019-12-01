@@ -31,7 +31,7 @@ const server = http.createServer((req,res) => {
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
 						
-						if (postdata.regpassword==confirmpassword){
+						if (postdata.regpassword==postdata.confirmpassword){
 						
 						const client = new MongoClient(mongoDBurl);
 						client.connect((err) => {
