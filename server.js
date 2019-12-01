@@ -1,6 +1,5 @@
 const http = require('http');
 const url  = require('url');
-const qs = require ('querystring');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const ObjectId = require('mongodb').ObjectID;
@@ -67,12 +66,12 @@ const server = http.createServer((req,res) => {
 			
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
-						res.writeHead(200, {'Content-Type': 'text/html'}); 
-						res.write('<html>')        
-						res.write(`User Name = ${postdata.logid}`);
-						res.write('<br>')
-						res.write(`Password = ${postdata.password}`);
-						res.end('</html>')                 
+						db.collection('user').insertOne(postdata,(err,result) => {
+							assert.equal(err,null);
+							console.log("insert was successful!");
+							console.log(JSON.stringify(result));
+							callback(result);
+						  });               
 					 })	
 				} else {
 					res.writeHead(404, {'Content-Type': 'text/plain'}); 
