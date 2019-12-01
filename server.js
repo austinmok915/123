@@ -68,14 +68,28 @@ const server = http.createServer((req,res) => {
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
 						
-							
-							res.writeHead(200, {'Content-Type': 'text/html'}); 
+							const client = new MongoClient(mongoDBurl);
+						client.connect((err) => {
+							assert.equal(null,err);
+							console.log("Connected successfully to server");
+							const db = client.db(dbName);
+							try{
+							temp = '{ "name" :  "'+ postdata.logid + '", "password" : "' + postdata.password + '"}';
+							obj ={};
+							obj = JSON.parse(temp);
+							} catch (err) {
+								console.log('Invalid a!');
+								}
+							db.collection('user').insertOne(obj,(err,result) => {
+								res.writeHead(200, {'Content-Type': 'text/html'}); 
          						res.write('<html>')        
          						res.write(`User Name = ${postdata.logid}`);
 				        
          						res.write('<br>')
         						res.write(`Password = ${postdata.password}`);
         						res.end('</html>') 					
+								});
+						});					
 								
 						
 					 })	
