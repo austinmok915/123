@@ -7,6 +7,7 @@ const mongoDBurl = 'mongodb+srv://aaron:aaronso@aarondb-ep2mi.mongodb.net/test?r
 const dbName = 's381assignment';
 var session = require('cookie-session');
 var express = require('express');
+const qs = require ('querystring');
 
 app = express();
 
@@ -66,10 +67,12 @@ const server = http.createServer((req,res) => {
 			
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
-						
+						Obj ={}
+						Obj = JSON.parse(postdata);
 						res.writeHead(200, {'Content-Type': 'text/html'}); 
          				res.write('<html>')        
          				res.write(`User Name = ${postdata.logid}`);
+				        res.write(`User = ${Obj}`);
          				res.write('<br>')
         				res.write(`Password = ${postdata.password}`);
         				res.end('</html>')             
