@@ -20,41 +20,53 @@ const server = http.createServer((req,res) => {
 
 	switch(parsedURL.pathname) {
 		case '/register':
-				const form = new formidable.IncomingForm();
-				form.parse(req, (err, fields, files) => {
-				  // console.log(JSON.stringify(files));
-					   
-				  if ( (fields.regpassword == fields.confirmpassword) ){
-						regid = fields.regid;
-						regpassword= fields.regpassword;
-					  }
-				  else {
-						res.writeHead(200, {"Content-Type": "text/html"});
-						res.write('<html><body>Confirm password does not match!<br>');
-						res.end('<a href="/">Back</a></body></html>')}
-				  
-				  let client = new MongoClient(mongoDBurl);
-					client.connect((err) => {
-					  try {
-						  assert.equal(err,null);
-						} catch (err) {
-						  res.writeHead(500,{"Content-Type":"text/plain"});
-						  res.end("MongoClient connect() failed!");
-						  return(-1);
-					  }
-					  const db = client.db(dbName);
-					  let r = {};
-					  r['regid'] = regid;
-					  r['password'] = regpassword;
-					  insertUser(db,r,(result) => {
-						client.close();
-						res.writeHead(200, {"Content-Type": "text/html"});
-						res.write('<html><body>New account registered!<br>');
-						res.end('<a href="/">Back</a></body></html>')
-					  })
+					if (req.method == 'POST') {
+					let data = '';  // message body data
+					console.log(typeof data);
+					// process data in message body
+					req.on('data', (payload) => {
+					   data += payload;
 					});
-				  
-				});
+			
+					req.on('end', () => {  
+						let postdata = qs.parse(data);
+						
+						if (postdata.regpassword==confirmpassword){
+						
+						const client = new MongoClient(mongoDBurl);
+						client.connect((err) => {
+							assert.equal(null,err);
+							console.log("Connected successfully to server");
+							const db = client.db(dbName);
+							try{
+							temp = '{ "name" :  "'+ postdata.logid + '", "password" : "' + postdata.regpassword + '"}';
+							obj ={};
+							obj = JSON.parse(postdata);
+							} catch (err) {
+								console.log('Invalid!');}
+
+							db.collection('user').insertOne(obj,(err,result) => {
+								res.writeHead(200, {'Content-Type': 'text/html'}); 
+         						res.write('<html>')   
+         						res.write('<br><a href="/login">Login</a>')
+        						res.end('</html>') 					
+								});
+						});
+
+						} else {
+								res.writeHead(200, {'Content-Type': 'text/html'}); 
+								res.write('<html>')   
+         						res.write('<br><a href="/login">Confirm password does not match!</a>')
+        						res.end('</html>') 
+								}  
+
+					 	})
+
+				} else {
+					res.writeHead(404, {'Content-Type': 'text/plain'}); 
+					res.end('Error.')
+				}
+			
 			break;
 		case '/login':
 				if (req.method == 'POST') {
