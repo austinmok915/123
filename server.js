@@ -67,13 +67,20 @@ const server = http.createServer((req,res) => {
 			
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
-						console.log(typeof data);
+						const client = new MongoClient(url);
+						client.connect((err) => {
+  						assert.equal(null,err);
+  						console.log("Connected successfully to server");
+
+  						const db = client.db(dbName);
 						db.collection('user').insertOne(postdata,(err,result) => {
 							assert.equal(err,null);
 							console.log("insert was successful!");
 							console.log(JSON.stringify(result));
 							callback(result);
 						  });  
+						});
+						 
 						
 						res.writeHead(200, {'Content-Type': 'text/html'}); 
          				res.write('<html>')        
@@ -81,7 +88,8 @@ const server = http.createServer((req,res) => {
 				        
          				res.write('<br>')
         				res.write(`Password = ${postdata.password}`);
-        				res.end('</html>')             
+        				res.end('</html>')    
+
 					 })	
 				} else {
 					res.writeHead(404, {'Content-Type': 'text/plain'}); 
