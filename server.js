@@ -48,7 +48,7 @@ const server = http.createServer((req,res) => {
 							db.collection('user').insertOne(obj,(err,result) => {
 								res.writeHead(200, {'Content-Type': 'text/html'}); 
          						res.write('<html>')   
-         						res.write('<br><a href="/login">Register Success</a>')
+         						res.write('<br><a href="/">Register Success</a>')
         						res.end('</html>') 					
 								});
 						});
@@ -92,13 +92,11 @@ const server = http.createServer((req,res) => {
 							} catch (err) {
 								console.log('Invalid a!');
 								}
-							db.collection('user').insertOne(obj,(err,result) => {
+							db.collection('user').find(obj,(err,result) => {
+								console.log("4");
 								res.writeHead(200, {'Content-Type': 'text/html'}); 
          						res.write('<html>')        
-         						res.write(`User Name = ${postdata.logid}`);
-				        
-         						res.write('<br>')
-        						res.write(`Password = ${postdata.password}`);
+         						
         						res.end('</html>') 					
 								});
 						});					
