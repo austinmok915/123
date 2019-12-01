@@ -63,15 +63,15 @@ const server = http.createServer((req,res) => {
         	res.write(' <h3>Login</h3>');
         	res.write(' <form action="/login" method="post" class="w3-container w3-card-2">');
 			res.write('	 <p>');
-			res.write(`	 <input name="logid" class="w3-input" type="text" style="width:50%" required="">`);
-			res.write('	 <label class="w3-label w3-validate">Name</label></p>');
+			res.write(`	 Name:<br></br><input name="logid" class="w3-input" type="text" style="width:50%" required="">`);
+			
 			res.write('	  <p>');
-			res.write(`	  <input name="password" class="w3-input" type="password" style="width:50%">`);
-			res.write('	 <label class="w3-label w3-validate">Password</label></p>');
+			res.write(`	  Password:<br></br><input name="password" class="w3-input" type="password" style="width:50%">`);
+			
 			res.write('	 <p>');
 			res.write(`	  <button class="w3-btn w3-section w3-teal w3-ripple"> Log in </button></p>`);
 			res.write('	 </form>	</div>   ');        
-            res.write('	<div class="w3-container w3-half w3-margin-top">');
+            
             res.write('      <h3>Register</h3>');
             res.write('      <form action="/register" method="post" class="w3-container w3-card-2">');
             res.write('         <p>');
