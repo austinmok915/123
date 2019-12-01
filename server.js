@@ -56,7 +56,7 @@ const server = http.createServer((req,res) => {
 						} else {
 								res.writeHead(200, {'Content-Type': 'text/html'}); 
 								res.write('<html>')   
-         						res.write('<br><a href="/login">Confirm password does not match!</a>')
+         						res.write('<br><a href="/">Confirm password does not match!</a>')
         						res.end('</html>') 
 								}  
 
