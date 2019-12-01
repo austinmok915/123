@@ -67,7 +67,7 @@ const server = http.createServer((req,res) => {
 			
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
-						
+						console.log(typeof data);
 						res.writeHead(200, {'Content-Type': 'text/html'}); 
          				res.write('<html>')        
          				res.write(`User Name = ${postdata.logid}`);
