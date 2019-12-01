@@ -323,7 +323,7 @@ const insertDoc = (res,doc) => {
 			assert.equal(null,err);
 			console.log("Connected successfully to server");
 			const db = client.db(dbName);
-			db.collection('restaurant').insertOne(docObj,(err,result) => {
+			db.collection('restaurants').insertOne(docObj,(err,result) => {
 				assert.equal(err,null);
 				res.writeHead(200, {"Content-Type": "text/html"});
 				res.write('<html><body>');
@@ -352,7 +352,7 @@ const deleteDoc = (res,criteria) => {
 			assert.equal(null,err);
 			console.log("Connected successfully to server");
 			const db = client.db(dbName);
-			db.collection('restaurant').deleteOne(criteriaObj,(err,result) => {
+			db.collection('restaurants').deleteOne(criteriaObj,(err,result) => {
 				console.log(result);
 				assert.equal(err,null);
 				res.writeHead(200, {"Content-Type": "text/html"});
@@ -381,7 +381,7 @@ const updateDoc = (res,newDoc) => {
 			let criteria = {};
 			criteria['_id'] = ObjectId(newDoc._id);
 			delete newDoc._id;
-			db.collection('restaurant').replaceOne(criteria,newDoc,(err,result) => {
+			db.collection('restaurants').replaceOne(criteria,newDoc,(err,result) => {
 				assert.equal(err,null);
 				console.log(JSON.stringify(result));
 				res.writeHead(200, {"Content-Type": "text/html"});
