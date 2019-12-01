@@ -63,10 +63,10 @@ const server = http.createServer((req,res) => {
         	res.write(' <h3>Login</h3>');
         	res.write(' <form action="/login" method="post" class="w3-container w3-card-2">');
 			res.write('	 <p>');
-			res.write(`	 Name:<br></br><input name="logid" class="w3-input" type="text" style="width:50%" required="">`);
+			res.write(`	 Name:<br></br><input name="logid" class="w3-input" type="text" style="width:20%" required="">`);
 			
 			res.write('	  <p>');
-			res.write(`	  Password:<br></br><input name="password" class="w3-input" type="password" style="width:50%">`);
+			res.write(`	  Password:<br></br><input name="password" class="w3-input" type="password" style="width:20%">`);
 			
 			res.write('	 <p>');
 			res.write(`	  <button class="w3-btn w3-section w3-teal w3-ripple"> Log in </button></p>`);
@@ -75,14 +75,14 @@ const server = http.createServer((req,res) => {
             res.write('      <h3>Register</h3>');
             res.write('      <form action="/register" method="post" class="w3-container w3-card-2">');
             res.write('         <p>');
-            res.write(`         Name:<br></br><input name="regid" class="w3-input" type="text" style="width:50%" required="">`);
+            res.write(`         Name:<br></br><input name="regid" class="w3-input" type="text" style="width:20%" required="">`);
             
             res.write('         <p>');
-            res.write(`         Password:<br></br><input name="regpassword" class="w3-input" type="password" style="width:50%">`);
+            res.write(`         Password:<br></br><input name="regpassword" class="w3-input" type="password" style="width:20%">`);
             res.write('         </p>');
             res.write('         <p>');
             res.write('         <p>');
-            res.write(`         confirm password:<br></br><input name="confirmpassword" class="w3-input" type="password" style="width:50%">`);
+            res.write(`         confirm password:<br></br><input name="confirmpassword" class="w3-input" type="password" style="width:20%">`);
             
             res.write('         <p>   ');
             res.write(`         <input type="submit" form="Register form" value="Register"></p>`);
