@@ -22,10 +22,7 @@ const server = http.createServer((req,res) => {
 			register(req,res);
 			break;
 
-		case '/login':
-			
-
-			break;
+		
 		case '/read':
 			read_n_print(res,parseInt(max));
 			break;
