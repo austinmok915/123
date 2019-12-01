@@ -104,6 +104,27 @@ const server = http.createServer((req,res) => {
 
 
 const register = (req,res) => { 
+    let client = new MongoClient(mongourl);
+	client.connect((err) => {
+	  try {
+		  assert.equal(err,null);
+		} catch (err) {
+		  res.writeHead(500,{"Content-Type":"text/plain"});
+		  res.end("MongoClient connect() failed!");
+		  return(-1);
+	  }
+	  const db = client.db(dbName);
+	db.collection('user').insertOne( {
+		"name" : "Introduction to Node.js",
+		"author" : "John Dole",
+		"price" : 75.00,
+		"stock" : 0      
+	   }, (err, result) => {
+		  assert.equal(err, null);
+		  console.log("Inserted one document into the books collection.");
+		  callback(result);
+	  });
+		
     const form = new formidable.IncomingForm();
     form.parse(req, (err, fields, files) => {
       // console.log(JSON.stringify(files));
