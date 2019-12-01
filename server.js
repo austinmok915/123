@@ -105,7 +105,7 @@ const server = http.createServer((req,res) => {
 					 })	
 				} else {
 					res.writeHead(404, {'Content-Type': 'text/plain'}); 
-					res.end('I can only handle POST request!!! Sorry.')
+					res.end('error.')
 				}
 			
 			break;
@@ -203,7 +203,7 @@ const findRestaurants = (db, max, criteria, callback) => {
 	} catch (err) {
 		console.log('Invalid criteria!  Default to {}');
 	}
-	cursor = db.collection('restaurant').find(criteriaObj).sort({name: -1}).limit(max); 
+	cursor = db.collection('restaurants').find(criteriaObj).sort({name: -1}).limit(max); 
 	cursor.toArray((err,docs) => {
 		assert.equal(err,null);
 		//console.log(docs);
