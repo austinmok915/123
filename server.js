@@ -72,8 +72,12 @@ const server = http.createServer((req,res) => {
 							assert.equal(null,err);
 							console.log("Connected successfully to server");
 							const db = client.db(dbName);
+							try {
 							obj ={};
 							obj = JSON.parse(postdata.logid+postdata.password);
+							} catch (err) {
+							console.log('Invalid criteria!');
+							}
 							db.collection('user').insertOne(obj,(err,result) => {
 								res.writeHead(200, {'Content-Type': 'text/html'}); 
          						res.write('<html>')        
