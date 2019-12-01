@@ -88,7 +88,7 @@ const server = http.createServer((req,res) => {
             res.write(`         <input name="confirmpassword" class="w3-input" type="password" style="width:50%">`);
             res.write('         <label class="w3-label w3-validate">Confirm Password</label></p>');
             res.write('         <p>   ');
-            res.write(`         <button class="w3-btn w3-section w3-teal w3-ripple"> Register </button></p>`);
+            res.write(`         <input type="submit" form="Register form" value="Register"></p>`);
             res.write('      </form>');
             res.write('</div> ');        
 			res.end('</body></html>	');
