@@ -60,12 +60,8 @@ const server = http.createServer((req,res) => {
 			res.end('</body></html>	');
 			break;
 		case '/register':
-			register(res,req);
+			register(req,res);
 			break;
-
-		case '/login':
-			break;
-
 
 		case '/read':
 			read_n_print(res,parseInt(max));
@@ -107,8 +103,8 @@ const server = http.createServer((req,res) => {
 
 
 
-const register = (res,req) => { 
-	const form = new formidable.IncomingForm();
+const register = (req,res) => { 
+    const form = new formidable.IncomingForm();
     form.parse(req, (err, fields, files) => {
       // console.log(JSON.stringify(files));
            
