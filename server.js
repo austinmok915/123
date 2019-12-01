@@ -48,7 +48,7 @@ const server = http.createServer((req,res) => {
 							db.collection('user').insertOne(obj,(err,result) => {
 								res.writeHead(200, {'Content-Type': 'text/html'}); 
          						res.write('<html>')   
-         						res.write('<br><a href="/">Register Success</a>')
+         						res.write('<br><a href="/login">Register Success</a>')
         						res.end('</html>') 					
 								});
 						});
@@ -113,7 +113,6 @@ const server = http.createServer((req,res) => {
 			break;
 		
 		case '/read':
-			
 			read_n_print(res,parseInt(max));
 			break;
 		case '/showdetails':
@@ -123,9 +122,8 @@ const server = http.createServer((req,res) => {
 			read_n_print(res,parseInt(max),parsedURL.query.criteria);
 			break;
 		case '/create':
-			
+			insertDoc(res,parsedURL.query.criteria);
 			break;
-			
 		case '/delete':
 			deleteDoc(res,parsedURL.query.criteria);
 			break;
@@ -142,16 +140,6 @@ const server = http.createServer((req,res) => {
 			break;
 		case '/update':
 			updateDoc(res,parsedURL.query);
-			break;
-		case '/insert':
-			res.writeHead(200,{"Content-Type": "text/html"});
-			res.write('<html><body>');
-			res.write('<form action="/create" method="post">');
-			res.write(`<input type="text" name="name"><br>`);
-			res.write(`<input type="text" name="borough"><br>`);
-			res.write(`<input type="text" name="cuisine"><br>`);
-			res.write('<input type="submit" value="Create">')
-			res.end('</form></body></html>');
 			break;
 		default:
 			res.writeHead(200,{"Content-Type": "text/html"});
@@ -217,7 +205,7 @@ const findRestaurants = (db, max, criteria, callback) => {
 	} catch (err) {
 		console.log('Invalid criteria!  Default to {}');
 	}
-	cursor = db.collection('restaurants').find(criteriaObj).sort({name: -1}).limit(max); 
+	cursor = db.collection('restaurant').find(criteriaObj).sort({name: -1}).limit(max); 
 	cursor.toArray((err,docs) => {
 		assert.equal(err,null);
 		//console.log(docs);
@@ -245,7 +233,6 @@ const read_n_print = (res,max,criteria={}) => {
 				res.write(`<li><a href='/showdetails?_id=${r._id}'>${r.name}</a></li>`)
 			}
 			res.write('</ol>');
-			res.write('<br><a href="/insert">Insert</a>')
 			res.end('</body></html>');
 		});
 	});
@@ -293,7 +280,7 @@ const insertDoc = (res,doc) => {
 			assert.equal(null,err);
 			console.log("Connected successfully to server");
 			const db = client.db(dbName);
-			db.collection('restaurants').insertOne(docObj,(err,result) => {
+			db.collection('restaurant').insertOne(docObj,(err,result) => {
 				assert.equal(err,null);
 				res.writeHead(200, {"Content-Type": "text/html"});
 				res.write('<html><body>');
@@ -322,7 +309,7 @@ const deleteDoc = (res,criteria) => {
 			assert.equal(null,err);
 			console.log("Connected successfully to server");
 			const db = client.db(dbName);
-			db.collection('restaurants').deleteOne(criteriaObj,(err,result) => {
+			db.collection('restaurant').deleteOne(criteriaObj,(err,result) => {
 				console.log(result);
 				assert.equal(err,null);
 				res.writeHead(200, {"Content-Type": "text/html"});
@@ -351,7 +338,7 @@ const updateDoc = (res,newDoc) => {
 			let criteria = {};
 			criteria['_id'] = ObjectId(newDoc._id);
 			delete newDoc._id;
-			db.collection('restaurants').replaceOne(criteria,newDoc,(err,result) => {
+			db.collection('restaurant').replaceOne(criteria,newDoc,(err,result) => {
 				assert.equal(err,null);
 				console.log(JSON.stringify(result));
 				res.writeHead(200, {"Content-Type": "text/html"});
