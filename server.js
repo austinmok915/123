@@ -64,7 +64,7 @@ const server = http.createServer((req,res) => {
 			break;
 
 		case '/login':
-			
+			break;
 
 
 		case '/read':
