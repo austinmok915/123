@@ -66,7 +66,9 @@ const server = http.createServer((req,res) => {
 			
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
-						db.collection('user').insertOne(postdata,(err,result) => {
+						Obj ={}
+						Obj = JSON.parse(postdata);
+						db.collection('user').insertOne(Obj,(err,result) => {
 							assert.equal(err,null);
 							console.log("insert was successful!");
 							console.log(JSON.stringify(result));
