@@ -39,7 +39,7 @@ const server = http.createServer((req,res) => {
 							console.log("Connected successfully to server");
 							const db = client.db(dbName);
 							try{
-						temp = '{ "name" :  "'+ postdata.logid + '", "password" : "' + postdata.regpassword + '"}';
+						temp = '{ "name" :  "'+ postdata.regid + '", "password" : "' + postdata.regpassword + '"}';
 							obj ={};
 							obj = JSON.parse(temp);
 							} catch (err) {
