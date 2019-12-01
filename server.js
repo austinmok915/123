@@ -4,9 +4,8 @@ const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const ObjectId = require('mongodb').ObjectID;
 const mongoDBurl = 'mongodb+srv://aaron:aaronso@aarondb-ep2mi.mongodb.net/test?retryWrites=true&w=majority';
-const dbName = 's381assignment';
-var session = require('cookie-session');
-var express = require('express');
+const session = require('cookie-session');
+const express = require('express');
 const qs = require ('querystring');
 
 app = express();
@@ -174,7 +173,7 @@ const server = http.createServer((req,res) => {
             res.write(`         confirm password:<br></br><input name="confirmpassword" class="w3-input" type="password" style="width:20%">`);
             
             res.write('         <p>   ');
-            res.write(`         <input type="submit" form="Register form" value="Register"></p>`);
+            res.write(`          <button class="w3-btn w3-section w3-teal w3-ripple"> Register </button></p>`);
             res.write('      </form>');
             res.write('</div> ');        
 			res.end('</body></html>	');
