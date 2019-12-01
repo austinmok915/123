@@ -16,7 +16,43 @@ const server = http.createServer((req,res) => {
 	let max = (parsedURL.query.max) ? parsedURL.query.max : 20;   		 
 
 	switch(parsedURL.pathname) {
-		case '/':
+		
+			
+			
+		case '/register':
+			register(req,res);
+			break;
+
+		case '/read':
+			read_n_print(res,parseInt(max));
+			break;
+		case '/showdetails':
+			showdetails(res,parsedURL.query._id);
+			break;
+		case '/search':
+			read_n_print(res,parseInt(max),parsedURL.query.criteria);
+			break;
+		case '/create':
+			insertDoc(res,parsedURL.query.criteria);
+			break;
+		case '/delete':
+			deleteDoc(res,parsedURL.query.criteria);
+			break;
+		case '/edit':
+			res.writeHead(200,{"Content-Type": "text/html"});
+			res.write('<html><body>');
+			res.write('<form action="/update">');
+			res.write(`<input type="text" name="name" value="${parsedURL.query.name}"><br>`);
+			res.write(`<input type="text" name="borough" value="${parsedURL.query.borough}"><br>`);
+			res.write(`<input type="text" name="cuisine" value="${parsedURL.query.cuisine}"><br>`);
+			res.write(`<input type="hidden" name="_id" value="${parsedURL.query._id}"><br>`);
+			res.write('<input type="submit" value="Update">')
+			res.end('</form></body></html>');
+			break;
+		case '/update':
+			updateDoc(res,parsedURL.query);
+			break;
+		default:
 			res.writeHead(200,{"Content-Type": "text/html"});
 			res.write('<html><head>');
 			res.write('<title>Login</title>');
@@ -56,45 +92,6 @@ const server = http.createServer((req,res) => {
             res.write('      </form>');
             res.write('</div> ');        
 			res.end('</body></html>	');
-			break;
-		case '/register':
-			register(req,res);
-			break;
-
-		case '/read':
-			read_n_print(res,parseInt(max));
-			break;
-		case '/showdetails':
-			showdetails(res,parsedURL.query._id);
-			break;
-		case '/search':
-			read_n_print(res,parseInt(max),parsedURL.query.criteria);
-			break;
-		case '/create':
-			insertDoc(res,parsedURL.query.criteria);
-			break;
-		case '/delete':
-			deleteDoc(res,parsedURL.query.criteria);
-			break;
-		case '/edit':
-			res.writeHead(200,{"Content-Type": "text/html"});
-			res.write('<html><body>');
-			res.write('<form action="/update">');
-			res.write(`<input type="text" name="name" value="${parsedURL.query.name}"><br>`);
-			res.write(`<input type="text" name="borough" value="${parsedURL.query.borough}"><br>`);
-			res.write(`<input type="text" name="cuisine" value="${parsedURL.query.cuisine}"><br>`);
-			res.write(`<input type="hidden" name="_id" value="${parsedURL.query._id}"><br>`);
-			res.write('<input type="submit" value="Update">')
-			res.end('</form></body></html>');
-			break;
-		case '/update':
-			updateDoc(res,parsedURL.query);
-			break;
-		default:
-			res.writeHead(404, {"Content-Type": "text/html"});
-			res.write('<html><body>');
-			res.write("404 Not Found\n");
-			res.end('<br><a href=/read?max=5>Give this a try instead?</a>');
 		
 	}
 });
