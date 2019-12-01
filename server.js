@@ -16,7 +16,7 @@ const server = http.createServer((req,res) => {
 	console.log(`Incoming request ${req.method}, ${req.url} received at ${timestamp}`);
 
 	let parsedURL = url.parse(req.url,true); // true to get query as object 
-	 		 
+	let max = (parsedURL.query.max) ? parsedURL.query.max : 20; 		 
 
 	switch(parsedURL.pathname) {
 		case '/register':
