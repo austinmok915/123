@@ -70,7 +70,7 @@ const server = http.createServer((req,res) => {
 						Obj = JSON.parse(postdata);
 						res.writeHead(200, {'Content-Type': 'text/html'}); 
          				res.write('<html>')        
-         				res.write(`User Name = ${Obj}`);
+         				res.write(`User Name = ${postdata.name}`);
          				res.write('<br>')
         				res.write(`Password = ${postdata.password}`);
         				res.end('</html>')             
