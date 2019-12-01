@@ -122,8 +122,39 @@ const server = http.createServer((req,res) => {
 			read_n_print(res,parseInt(max),parsedURL.query.criteria);
 			break;
 		case '/create':
-			insertDoc(res,parsedURL.query.criteria);
+			if (req.method == 'POST') {
+				let data = '';  // message body data
+				req.on('data', (payload) => {
+					data += payload;
+				});
+				req.on('end', () => {  
+					let postdata = qs.parse(data);
+					const client = new MongoClient(mongoDBurl);
+					client.connect((err) => {
+						assert.equal(null,err);
+						console.log("Connected successfully to server");
+						const db = client.db(dbName);
+						try{
+							temp = '{"name" :  "'+ postdata.name + '", "borough" : "' + postdata.borough + '", "cuisine" : "' + postdata.cuisine + '"}';
+							obj ={};
+							obj = JSON.parse(temp);
+						} catch (err) {
+							console.log('Invalid!');
+						}
+						db.collection('restaurants').insertOne(obj,(err,result) => {
+							res.writeHead(200, {'Content-Type': 'text/html'}); 
+         						res.write('<html>')        
+         						res.write('Successful!')
+        						res.end('</html>') 					
+						});
+					});					
+				})	
+				} else {
+					res.writeHead(404, {'Content-Type': 'text/plain'}); 
+					res.end('Error.')
+				}
 			break;
+			
 		case '/delete':
 			deleteDoc(res,parsedURL.query.criteria);
 			break;
@@ -140,6 +171,16 @@ const server = http.createServer((req,res) => {
 			break;
 		case '/update':
 			updateDoc(res,parsedURL.query);
+			break;
+		case '/insert':
+			res.writeHead(200,{"Content-Type": "text/html"});
+			res.write('<html><body>');
+			res.write('<form action="/create" method="post">');
+			res.write(`<input type="text" name="name"><br>`);
+			res.write(`<input type="text" name="borough"><br>`);
+			res.write(`<input type="text" name="cuisine"><br>`);
+			res.write('<input type="submit" value="Create">')
+			res.end('</form></body></html>');
 			break;
 		default:
 			res.writeHead(200,{"Content-Type": "text/html"});
@@ -233,6 +274,7 @@ const read_n_print = (res,max,criteria={}) => {
 				res.write(`<li><a href='/showdetails?_id=${r._id}'>${r.name}</a></li>`)
 			}
 			res.write('</ol>');
+			res.write('<br><a href="/insert">Insert</a>')
 			res.end('</body></html>');
 		});
 	});
