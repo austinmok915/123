@@ -93,11 +93,8 @@ const server = http.createServer((req,res) => {
 								console.log('Invalid a!');
 								}
 							db.collection('user').find(obj,(err,result) => {
-								console.log("4");
-								res.writeHead(200, {'Content-Type': 'text/html'}); 
-         						res.write('<html>')        
-         						
-        						res.end('</html>') 					
+								console.log("4");								        
+         							read_n_print(res,parseInt(max));        						 					
 								});
 						});					
 								
