@@ -117,8 +117,96 @@ const server = http.createServer((req,res) => {
 			read_n_print(res,parseInt(max),parsedURL.query.criteria);
 			break;
 		case '/create':
-			insertDoc(res,parsedURL.query.criteria);
-			break;
+			const form = new formidable.IncomingForm();
+    			form.parse(req, (err, fields, files) => {
+				if (files.filetoupload.size == 0) {
+       		 			console.log("1");
+					res.writeHead(500,{"Content-Type":"text/plain"});
+       					res.end("No file uploaded!");  
+      				}
+				const filename = files.filetoupload.path;
+				let mimetype = "images/jpeg"
+      				if (fields.name && fields.name.length > 0) {
+        				console.log("1");
+					name = fields.name;
+      				}
+				if (fields.borough && fields.borough.length > 0) {
+        				console.log("2");
+					borough = fields.borough;
+      				}      
+				if (fields.cuisine && fields.cuisine.length > 0) {
+        				console.log("3");
+					cuisine = fields.cuisine;
+      				}      				
+				if (fields.street && fields.street.length > 0) {
+        				console.log("4");
+					street = fields.street;
+      				}      				
+				if (fields.building && fields.building.length > 0) {
+        				console.log("4");
+					building = fields.building;
+      				}      				
+				if (fields.zipcode && fields.zipcode.length > 0) {
+        				console.log("4");
+					zipcode = fields.zipcode;
+      				}      				
+				if (fields.latitude && fields.latitude.length > 0) {
+        				console.log("4");
+					latitude = fields.latitude;
+      				}
+				if (fields.longitude && fields.longitude.length > 0) {
+        				console.log("5");
+					longitude = fields.longitude;
+      				}
+				if (fields.score && fields.score.length > 0) {
+        				console.log("6");
+					score = fields.score;
+      				}
+				if (files.filetoupload.type) {
+					console.log("7");
+					mimetype = files.filetoupload.type;
+				}
+				fs.readFile(files.filetoupload.path, (err,data) => {
+        				console.log("8");
+					let client = new MongoClient(mongoDBurl);
+        				client.connect((err) => {
+         					try {
+              						assert.equal(err,null);
+           				 	} catch (err) {
+              						res.writeHead(500,{"Content-Type":"text/plain"});
+              						res.end("MongoClient connect() failed!");
+              						return(-1);
+          					}
+          					const db = client.db(dbName);
+          					let new_r = {};
+						new_r['name'] = name;
+						console.log("9");
+						new_r['borough'] = borough;
+						console.log("0");
+						new_r['cuisine'] = cuisine;
+						new_r['address'] = {"street" : "'+ street + '", "building" : "' + building + '", 
+								    "zipcode" : "' + zipcode + '", "latitude" : "' + latitude + '", 
+								    "longitude" : "' + longitude '"};
+						console.log("1");
+						new_r['grades'] = {"user" : "'+ score + '", "score" : "' + score '"};
+						console.log("14");
+						new_r['owner'] = borough
+						console.log("21");
+						new_r['mimetype'] = mimetype;
+         			 		console.log("31");
+						new_r['image'] = new Buffer.from(data).toString('base64');
+						console.log("31");
+						insertRestaurant(db,new_r,(result) => {
+							console.log("111");
+           						client.close();
+            						res.writeHead(200, {"Content-Type": "text/html"});
+            						res.write('<html><body>Photo was inserted into MongoDB!<br>');
+            						res.end('<a href="/photos">Back</a></body></html>')
+          					})
+        				});
+  				})
+    			});
+		break;
 		case '/delete':
 			deleteDoc(res,parsedURL.query.criteria);
 			break;
@@ -348,6 +436,15 @@ const updateDoc = (res,newDoc) => {
 		res.write("Updated failed!\n");
 		res.write(newDoc);
 		res.end('<br><a href=/read?max=5>Home</a>');	
+	}
+	const insertRestaurant = (db,r,callback) => {
+  		db.collection('restaurants').insertOne(r,(err,result) => {
+   			console.log("51");
+			assert.equal(err,null);
+    			console.log("insert was successful!");
+    			console.log(JSON.stringify(result));
+   		callback(result);
+  		});
 	}
 }
 
