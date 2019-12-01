@@ -4,8 +4,8 @@ const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const ObjectId = require('mongodb').ObjectID;
 const mongoDBurl = 'mongodb+srv://aaron:aaronso@aarondb-ep2mi.mongodb.net/test?retryWrites=true&w=majority';
-const session = require('cookie-session');
-const express = require('express');
+var session = require('cookie-session');
+var express = require('express');
 const qs = require ('querystring');
 
 app = express();
@@ -40,7 +40,7 @@ const server = http.createServer((req,res) => {
 							try{
 							temp = '{ "name" :  "'+ postdata.logid + '", "password" : "' + postdata.regpassword + '"}';
 							obj ={};
-							obj = JSON.parse(postdata);
+							obj = JSON.parse(temp);
 							} catch (err) {
 								console.log('Invalid!');}
 
