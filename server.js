@@ -67,12 +67,11 @@ const server = http.createServer((req,res) => {
 			
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
-						Obj ={}
-						Obj = JSON.parse(postdata);
+						
 						res.writeHead(200, {'Content-Type': 'text/html'}); 
          				res.write('<html>')        
          				res.write(`User Name = ${postdata.logid}`);
-				        res.write(`User = ${Obj}`);
+				        
          				res.write('<br>')
         				res.write(`Password = ${postdata.password}`);
         				res.end('</html>')             
