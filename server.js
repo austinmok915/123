@@ -113,6 +113,7 @@ const server = http.createServer((req,res) => {
 			break;
 		
 		case '/read':
+			
 			read_n_print(res,parseInt(max));
 			break;
 		case '/showdetails':
@@ -246,7 +247,7 @@ const findRestaurants = (db, max, criteria, callback) => {
 	} catch (err) {
 		console.log('Invalid criteria!  Default to {}');
 	}
-	cursor = db.collection('restaurant').find(criteriaObj).sort({name: -1}).limit(max); 
+	cursor = db.collection('restaurants').find(criteriaObj).sort({name: -1}).limit(max); 
 	cursor.toArray((err,docs) => {
 		assert.equal(err,null);
 		//console.log(docs);
