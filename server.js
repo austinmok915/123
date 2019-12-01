@@ -60,7 +60,7 @@ const server = http.createServer((req,res) => {
 			res.end('</body></html>	');
 			break;
 		case '/register':
-			login(res,parsedURL.query.criteria);
+			register(res,parsedURL.query.criteria);
 			break;
 
 		case '/login':
