@@ -70,7 +70,7 @@ const server = http.createServer((req,res) => {
 			
 			res.write('	 <p>');
 			res.write(`	  <button class="w3-btn w3-section w3-teal w3-ripple"> Log in </button></p>`);
-			res.write('	 </form>	<p><p><p>   ');        
+			res.write('	 </form><br></br><br></br><br></br><br></br>   ');        
             
             res.write('      <h3>Register</h3>');
             res.write('      <form action="/register" method="post" class="w3-container w3-card-2">');
