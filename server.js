@@ -21,7 +21,7 @@ const server = http.createServer((req,res) => {
 		case '/register':
 					if (req.method == 'POST') {
 					let data = '';  // message body data
-					console.log(typeof data);
+					console.log("1");
 					// process data in message body
 					req.on('data', (payload) => {
 					   data += payload;
@@ -29,9 +29,9 @@ const server = http.createServer((req,res) => {
 			
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
-						console.log(typeof data);
+						console.log("2");
 						if (postdata.regpassword==postdata.confirmpassword){
-						console.log(typeof data);
+						console.log("3");
 						const client = new MongoClient(mongoDBurl);
 						client.connect((err) => {
 							assert.equal(null,err);
