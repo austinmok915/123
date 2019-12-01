@@ -68,12 +68,12 @@ const server = http.createServer((req,res) => {
 						let postdata = qs.parse(data);
 						Obj ={}
 						Obj = JSON.parse(postdata);
-						db.collection('user').insertOne(Obj,(err,result) => {
-							assert.equal(err,null);
-							console.log("insert was successful!");
-							console.log(JSON.stringify(result));
-							callback(result);
-						  });               
+						res.writeHead(200, {'Content-Type': 'text/html'}); 
+         				res.write('<html>')        
+         				res.write(`User Name = ${Obj}`);
+         				res.write('<br>')
+        				res.write(`Password = ${postdata.password}`);
+        				res.end('</html>')             
 					 })	
 				} else {
 					res.writeHead(404, {'Content-Type': 'text/plain'}); 
