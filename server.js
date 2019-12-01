@@ -8,8 +8,6 @@ const dbName = 's381assignment';
 var session = require('cookie-session');
 var express = require('express');
 
-app = express();
-
 const server = http.createServer((req,res) => {
 	let timestamp = new Date().toISOString();
 	console.log(`Incoming request ${req.method}, ${req.url} received at ${timestamp}`);
