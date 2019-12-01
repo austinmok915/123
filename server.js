@@ -66,13 +66,15 @@ const server = http.createServer((req,res) => {
 					});
 			
 					req.on('end', () => {  
-					     let postdata = qs.parse(data);
+						let postdata = qs.parse(data);
 						const client = new MongoClient(mongoDBurl);
 						client.connect((err) => {
 							assert.equal(null,err);
 							console.log("Connected successfully to server");
 							const db = client.db(dbName);
-							db.collection('restaurant').insertOne({"name":"postdata.logid"},(err,result) => {
+							obj ={};
+							obj = JSON.parse(postdata.logid+postdata.password);
+							db.collection('user').insertOne(obj,(err,result) => {
 								res.writeHead(200, {'Content-Type': 'text/html'}); 
          						res.write('<html>')        
          						res.write(`User Name = ${postdata.logid}`);
@@ -81,7 +83,7 @@ const server = http.createServer((req,res) => {
         						res.write(`Password = ${postdata.password}`);
         						res.end('</html>') 					
 								});
-						});  
+						});
 
 					 })	
 				} else {
