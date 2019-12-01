@@ -29,16 +29,16 @@ const server = http.createServer((req,res) => {
 			
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
-						
+						console.log(typeof data);
 						if (postdata.regpassword==postdata.confirmpassword){
-						
+						console.log(typeof data);
 						const client = new MongoClient(mongoDBurl);
 						client.connect((err) => {
 							assert.equal(null,err);
 							console.log("Connected successfully to server");
 							const db = client.db(dbName);
 							try{
-							temp = '{ "name" :  "'+ postdata.logid + '", "password" : "' + postdata.regpassword + '"}';
+						temp = '{ "name" :  "'+ postdata.logid + '", "password" : "' + postdata.regpassword + '"}';
 							obj ={};
 							obj = JSON.parse(temp);
 							} catch (err) {
