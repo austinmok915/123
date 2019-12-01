@@ -67,18 +67,19 @@ const server = http.createServer((req,res) => {
 			
 					req.on('end', () => {  
 						let postdata = qs.parse(data);
-						const client = new MongoClient(url);
 						client.connect((err) => {
-  						assert.equal(null,err);
-  						console.log("Connected successfully to server");
-
-  						const db = client.db(dbName);
-						db.collection('user').insertOne(postdata,(err,result) => {
-							assert.equal(err,null);
-							console.log("insert was successful!");
-							console.log(JSON.stringify(result));
-							callback(result);
-						  });  
+							assert.equal(null,err);
+							console.log("Connected successfully to server");
+							const db = client.db(dbName);
+							db.collection('restaurant').insertOne({"name":"postdata.logid"},(err,result) => {
+								res.writeHead(200, {'Content-Type': 'text/html'}); 
+         						res.write('<html>')        
+         						res.write(`User Name = ${postdata.logid}`);
+				        
+         						res.write('<br>')
+        						res.write(`Password = ${postdata.password}`);
+        						res.end('</html>') 					
+								});
 						});
 						 
 						
