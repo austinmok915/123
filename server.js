@@ -48,7 +48,7 @@ const server = http.createServer((req,res) => {
 							db.collection('user').insertOne(obj,(err,result) => {
 								res.writeHead(200, {'Content-Type': 'text/html'}); 
          						res.write('<html>')   
-         						res.write('<br><a href="/login">Register Success</a>')
+         						res.write('<br><a href="/">Register Success</a>')
         						res.end('</html>') 					
 								});
 						});
